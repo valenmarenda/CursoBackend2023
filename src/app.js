@@ -32,17 +32,18 @@ app.get("/products", async (req, res) => {
 });
 
 app.get("/products/:id_product", async (req, res) => {
-    try{  const id_product = req.params.id_product;
-        let product = json.find((p) => {
-          return p.id_product == id_product.toString();
-        });
-        if (!product) {
-          return res.send({
-            error: "Producto no encontrado.",
-          });
-        }
-        res.send({ product });} catch(err){
-            console.log(err)
-        }
-
+  try {
+    const id_product = req.params.id_product;
+    let product = json.find((p) => {
+      return p.id_product == id_product.toString();
+    });
+    if (!product) {
+      return res.send({
+        error: "Producto no encontrado.",
+      });
+    }
+    res.send({ product });
+  } catch (err) {
+    console.log(err);
+  }
 });
