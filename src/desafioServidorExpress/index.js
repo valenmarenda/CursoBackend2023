@@ -1,4 +1,4 @@
-/*import ManagerProducts from "./manager/productManager.js";
+import ManagerProducts from "./manager/productManager.js";
 const manager = new ManagerProducts();
 
 const env = async () => {
@@ -15,4 +15,3 @@ const env = async () => {
 };
 
 env();
-*/

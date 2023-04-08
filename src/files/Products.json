@@ -1,101 +1,102 @@
 [
-	{
-		"title": "computer",
-		"desc": "airpods 2",
-		"price": 800,
-		"thumbnail": "http//airpod",
-		"code": 5,
-		"id_product": 1,
-		"stock": 20
-	},
-	{
-		"title": "computer",
-		"desc": "airpods 2",
-		"price": 800,
-		"thumbnail": "http//airpod",
-		"code": 5,
-		"id_product": 2,
-		"stock": 20
-	},
-	{
-		"title": "pc",
-		"desc": "airpods 2",
-		"price": 800,
-		"thumbnail": "http//airpod",
-		"code": 5,
-		"id_product": 3,
-		"stock": 20
-	},
-	{
-		"title": "airpods",
-		"desc": "airpods 2",
-		"price": 1000,
-		"thumbnail": "http//airpod",
-		"code": 5,
-		"id_product": 4,
-		"stock": 20
-	},
-	{
-		"title": "pc",
-		"desc": "airpods 4",
-		"price": 9900,
-		"thumbnail": "http//airpod",
-		"code": 30,
-		"id_product": 5,
-		"stock": 50
-	},
-	{
-		"title": "pc",
-		"desc": "airpods 4",
-		"price": 9900,
-		"thumbnail": "http//airpod",
-		"code": 30,
-		"id_product": 6,
-		"stock": 50
-	},
-	{
-		"title": "pc",
-		"desc": "airpods 4",
-		"price": 8500,
-		"thumbnail": "http//airpod",
-		"code": 30,
-		"id_product": 7,
-		"stock": 20
-	},
-	{
-		"title": "pc",
-		"desc": "airpods 4",
-		"price": 9900,
-		"thumbnail": "http//airpod",
-		"code": 30,
-		"id_product": 8,
-		"stock": 50
-	},
-	{
-		"title": "pc",
-		"desc": "airpods 4",
-		"price": 9900,
-		"thumbnail": "http//airpod",
-		"code": 30,
-		"id_product": 9,
-		"stock": 50
-	},
-	{
-		"title": "80",
-		"desc": "airpods 4",
-		"price": 9900,
-		"thumbnail": "http//airpod",
-		"code": 30,
-		"id_product": 10,
-		"stock": 50
-	},
-	{
-		"title": "pc",
-		"desc": "airpods 4",
-		"price": 9900,
-		"thumbnail": "http//airpod",
-		"code": 30,
-		"id_product": 11,
-		"stock": 50
-	}
+  {
+    "id_product": 1,
+    "title": "tv",
+    "description": "Este es un ejemplo de producto.",
+    "code": "0056",
+    "price": 3,
+    "status": false,
+    "stock": 28,
+    "category": "ejemplo",
+    "thumbnails": ["http://surl.li/geuzn"]
+  },
+  {
+    "id_product": 2,
+    "title": "Ejemplo de producto",
+    "description": "Este es un ejemplo de producto.",
+    "code": "06",
+    "price": 20,
+    "status": true,
+    "stock": 15,
+    "category": "Ejemplo",
+    "thumbnails": ["http://surl.li/geuzn"]
+  },
+  {
+    "id_product": 3,
+    "title": "Ejemplo de producto",
+    "description": "http://surl.li/geuzn",
+    "code": "0006",
+    "price": 17.99,
+    "status": true,
+    "stock": 10,
+    "category": "Ejemplo",
+    "thumbnails": ["http://surl.li/geuzn, http://surl.li/geuzn"]
+  },
+  {
+    "id_product": 4,
+    "title": "Ejemplo de producto",
+    "description": "Este es un ejemplo de producto.",
+    "code": "002",
+    "price": 2,
+    "status": true,
+    "stock": 10,
+    "category": "Ejemplo",
+    "thumbnails": ["http://surl.li/geuzn"]
+  },
+  {
+    "id_product": 5,
+    "title": "Nuevo producto",
+    "description": "Este es un nuevo producto.",
+    "code": "0002",
+    "price": 88,
+    "status": true,
+    "stock": 50,
+    "category": "Ejemplo",
+    "thumbnails": [
+      "http://surl.li/geuzn",
+      "http://surl.li/geuzn"
+    ]
+  },
+  {
+    "id_product": 6,
+    "title": "producto",
+    "description": "Este es un nuevo producto.",
+    "code": "987654",
+    "price": 40,
+    "status": true,
+    "stock": 1,
+    "category": "Ejemplo",
+    "thumbnails": [
+      "http://surl.li/geuzn",
+      "http://surl.li/geuzn"
+    ]
+  },
+  {
+    "id_product": 7,
+    "title": "producto",
+    "description": "Este es un producto",
+    "code": "004",
+    "price": 29.99,
+    "status": true,
+    "stock": 5,
+    "category": "Ejemplo",
+    "thumbnails": [
+      "http://surl.li/geuzn",
+      "http://surl.li/geuzn"
+    ]
+  },
+  {
+    "id_product": 8,
+    "title": "producto",
+    "description": "Este es un producto.",
+    "code": "094",
+    "price": 60,
+    "status": false,
+    "stock": 8,
+    "category": "Ejemplo",
+    "thumbnails": [
+      "http://surl.li/geuzn",
+      "http://surl.li/geuzn"
+    ]
+  }
 ]
