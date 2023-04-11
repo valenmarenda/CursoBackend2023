@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { readFile, writeFile } from "fs/promises";
 import url from "url";
-const productsPath = "files/products.json";
+const productsPath = "src/files/Products.json";
 const router = Router();
 
 router.get("/", async (req, res) => {
@@ -43,19 +43,34 @@ router.get("/:id_product", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const {
-      title,
-      description,
-      code,
-      price,
-      status = true,
-      stock,
-      category,
-      thumbnails = [],
-    } = req.body;
+    if (
+      !req.body.title ||
+      !req.body.description ||
+      !req.body.code ||
+      !req.body.price ||
+      !req.body.stock ||
+      !req.body.category
+    ) {
+      return res
+        .status(400)
+        .send({
+          status: "error",
+          error: "All fields are required, except thumbnails",
+        });
+    }
 
     const data = await readFile(productsPath);
     const products = JSON.parse(data);
+    const existingProduct = products.find(
+      (product) =>
+        product.title === req.body.title || product.code === req.body.code
+    );
+
+    if (existingProduct) {
+      return res
+        .status(400)
+        .send({ status: "error", error: "Product already exists" });
+    }
 
     const maxId = products.reduce(
       (max, product) => Math.max(max, product.id_product),
@@ -64,14 +79,14 @@ router.post("/", async (req, res) => {
     const newProductId = maxId + 1;
     const newProduct = {
       id_product: newProductId,
-      title,
-      description,
-      code,
-      price,
-      status,
-      stock,
-      category,
-      thumbnails,
+      title: req.body.title,
+      description: req.body.description,
+      code: req.body.code,
+      price: req.body.price,
+      status: req.body.status || true,
+      stock: req.body.stock,
+      category: req.body.category,
+      thumbnails: req.body.thumbnails || [],
     };
 
     products.push(newProduct);
@@ -136,10 +151,12 @@ router.put("/:pid", async (req, res) => {
         category: category || products[index].category,
         thumbnails: thumbnails || products[index].thumbnails,
       };
-      await writeFile("files/products.json", JSON.stringify(products));
+      await writeFile(productsPath, JSON.stringify(products));
 
       if (req.body.hasOwnProperty("id_product")) {
-        res.send(`Product with id_product ${id} cannot be updated`);
+        res.send(
+          `Product with id_product ${id} cannot be updated, it is not allowed to modify the id.`
+        );
       } else {
         res.send(`Product with id_product ${id} has been updated`);
       }

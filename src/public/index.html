@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga de productos</title>
+</head>
+<body>
+    <h1>
+        Formulario de carga de productos
+    </h1>
+
+    <form action="/api/products" method="post" >
+
+        <label>title</label>
+        <input type="text" name="title">
+        <label>description</label>
+        <input type="text" name="description">
+        <label>code</label>
+        <input type="text" name="code">
+        <label>price</label>
+        <input type="number" name="price">
+        <label>status</label>
+        <input type="text" name="status">
+        <label>stock</label>
+        <input type="number" name="stock">
+        <label>category</label>
+        <input type="text" name="category">
+        <label>thumbnails</label>
+        <input type="file" name="thumbnails">
+
+        <input type="submit" >
+    </form>   
+</body>
+</html>

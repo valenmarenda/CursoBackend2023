@@ -3,8 +3,8 @@ import { readFile, writeFile } from "fs/promises";
 import fs from "fs/promises";
 
 const router = Router();
-const carritoPath = "files/Carrito.json";
-const productsPath = "files/products.json";
+const carritoPath = "src/files/Carrito.json";
+const productsPath = "src/files/products.json";
 
 router.get("/:id", async (req, res) => {
   try {
@@ -46,10 +46,10 @@ router.post("/", async (req, res) => {
     await writeFile(carritoPath, JSON.stringify(productsData));
     res.send({ status: "success", payload: newProduct });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Server error");
+    res.status(404).send({ status: "error", error: "An error has occurred" });
   }
 });
+
 router.post("/:cid/product/:pid", async (req, res) => {
   try {
     const cartData = await fs.readFile(carritoPath, "utf8");
@@ -90,4 +90,5 @@ router.post("/:cid/product/:pid", async (req, res) => {
     res.status(404).send("Error adding product to cart");
   }
 });
+
 export default router;
