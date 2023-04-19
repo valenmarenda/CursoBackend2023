@@ -1,0 +1,23 @@
+
+<h1>
+    Productos agregados hasta el momento:
+</h1>
+
+<ul>
+  {{#each products}}
+  <li>
+    <h3>{{title}}</h3>
+    <p>{{description}}</p>
+    <p>Precio: {{price}}</p>
+    <p>Stock: {{stock}}</p>
+    <img src="{{thumbnails.[0]}}" alt="{{title}} thumbnail">
+  </li>
+  {{/each}}
+</ul>
+
+
+
+   
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/home.js"></script>
