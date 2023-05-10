@@ -1,18 +1,26 @@
 import { Router } from "express";
 import { readFile, writeFile } from "fs/promises";
 import url from "url";
+import ManagerAccess from "../Dao/managers/ManagerAcces.js";
+import productModel from "../Dao/models/products.js";
+import ProductManagerMongo from "../productsmanager.js";
+
+const managerAcces = new ManagerAccess();
+
 const productsPath = "src/files/Products.json";
 const router = Router();
+const productManagerMongo = new ProductManagerMongo();
 
-router.get("/", async (req, res) => {
+router.get("/:limit?", async (req, res) => {
   try {
-    const data = await readFile(productsPath);
-    const products = JSON.parse(data);
-    const queryParams = url.parse(req.url, true).query;
-    const limit = queryParams.limit;
-    const results = limit ? products.slice(0, limit) : products;
-    if (Object.keys(products).length !== 0) {
-      res.send({ status: "success", payload: results });
+    const limite = req.params.limit || 10;
+
+    const result = await productModel.find().limit(Number(limite));
+
+    res.send({ result });
+
+    if (result.length !== 0) {
+      res.send({ result });
     } else {
       res.send({ status: "File does not contain products" });
     }
@@ -21,16 +29,28 @@ router.get("/", async (req, res) => {
     res.status(404).send({ status: "error", error: "An error has occurred" });
   }
 });
-
-router.get("/:id_product", async (req, res) => {
+router.get("/", async (request, response) => {
   try {
-    const data = await readFile(productsPath);
-    const products = JSON.parse(data);
-    const id_product = req.params.id_product;
-    let product = products.find((p) => {
-      return p.id_product == id_product.toString();
+    const respuesta = await productManagerMongo.getProducts();
+
+    response.status(respuesta.code).send({
+      status: respuesta.status,
+      message: respuesta.message,
     });
-    if (!product) {
+  } catch (err) {
+    console.log(err);
+    res.status(404).send({ status: "error", error: "An error has occurred" });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    await managerAcces.crearRegistro("Consulta un solo usuario");
+    const id = req.params.id;
+
+    const result = await productModel.findById({ _id: id });
+    res.send({ result });
+    if (!result) {
       return res.send({
         error: "Product not found.",
       });
@@ -43,56 +63,35 @@ router.get("/:id_product", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    if (
-      !req.body.title ||
-      !req.body.description ||
-      !req.body.code ||
-      !req.body.price ||
-      !req.body.stock ||
-      !req.body.category
-    ) {
-      return res
-        .status(400)
-        .send({
-          status: "error",
-          error: "All fields are required, except thumbnails",
-        });
+    await managerAcces.crearRegistro("Added product");
+    const {
+      title,
+      description,
+      code,
+      price,
+      status,
+      stock,
+      category,
+      thumbnails,
+    } = req.body;
+    if (!title || !description || !code || !price || !stock || !category) {
+      return res.status(400).send({
+        status: "error",
+        error: "All fields are required, except thumbnails",
+      });
     }
-
-    const data = await readFile(productsPath);
-    const products = JSON.parse(data);
-    const existingProduct = products.find(
-      (product) =>
-        product.title === req.body.title || product.code === req.body.code
-    );
-
-    if (existingProduct) {
-      return res
-        .status(400)
-        .send({ status: "error", error: "Product already exists" });
-    }
-
-    const maxId = products.reduce(
-      (max, product) => Math.max(max, product.id_product),
-      0
-    );
-    const newProductId = maxId + 1;
-    const newProduct = {
-      id_product: newProductId,
-      title: req.body.title,
-      description: req.body.description,
-      code: req.body.code,
-      price: req.body.price,
-      status: req.body.status || true,
-      stock: req.body.stock,
-      category: req.body.category,
-      thumbnails: req.body.thumbnails || [],
+    const product = {
+      title,
+      description,
+      code,
+      price,
+      status,
+      stock,
+      category,
+      thumbnails,
     };
-
-    products.push(newProduct);
-
-    await writeFile(productsPath, JSON.stringify(products));
-    res.send({ status: "success", payload: newProduct });
+    const result = await productModel.create(product);
+    res.send({ result });
   } catch (error) {
     res.status(404).send({ status: "error", error: "An error has occurred" });
   }
@@ -100,41 +99,29 @@ router.post("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    try {
-      const data = await readFile(productsPath);
-      const products = JSON.parse(data);
+    await managerAcces.crearRegistro("Elimina un usuario");
 
-      const index = products.findIndex((p) => p.id_product === id);
-      if (index !== -1) {
-        products.splice(index, 1);
-        await writeFile(productsPath, JSON.stringify(products));
-        res.send(`Product with id_product = ${id} has been removed`);
-      } else {
-        res.status(404).send(`Product with id_product = ${id} not found`);
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(404).send("Error deleting the product");
-    }
+    const id = req.params.id;
+    const result = await productModel.deleteOne({ _id: id });
+    //const result = await productModel.findOneAndDelete({ _id: id });
+    res.send({ result });
   } catch (err) {
     res.status(500).send("Error deleting the product");
   }
 });
 
-router.put("/:pid", async (req, res) => {
-  const id = parseInt(req.params.pid);
-  const {
-    title,
-    description,
-    code,
-    price,
-    status,
-    stock,
-    category,
-    thumbnails,
-  } = req.body;
+router.put("/:id", async (req, res) => {
   try {
+    await managerAcces.crearRegistro("Actualiza un usuario");
+
+    const id = req.params.uid;
+    const newUser = req.body;
+
+    const result = await productModel.updateOne({ _id: id }, { $set: newUser });
+    //    const result = await productModel.findByIdAndUpdate(id, newUser, {new: true,});
+
+    res.send({ result });
+    /*
     const data = await readFile(productsPath);
     const products = JSON.parse(data);
 
@@ -162,10 +149,11 @@ router.put("/:pid", async (req, res) => {
       }
     } else {
       res.status(404).send(`Product with id_product ${id} not found`);
-    }
+    }*/
   } catch (error) {
     console.error(error);
     res.status(500).send("Error updating the product");
   }
 });
+
 export default router;

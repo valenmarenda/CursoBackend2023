@@ -14,6 +14,4 @@ router.get('/realtimeproducts', (req,res)=>{
     res.render('realtimeproducts', { products: productsData });
 })
 
-
-
 export default router;

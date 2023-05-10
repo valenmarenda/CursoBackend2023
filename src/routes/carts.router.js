@@ -1,25 +1,39 @@
 import { Router } from "express";
 import { readFile, writeFile } from "fs/promises";
 import fs from "fs/promises";
+import ManagerAccess from "../Dao/managers/ManagerAcces.js";
+import CartManagerMongo from "../cartmanager.js"
+const managerAcces = new ManagerAccess() 
+import cartModel from "../Dao/models/carts.js";
 
 const router = Router();
 const carritoPath = "src/files/Carrito.json";
 const productsPath = "src/files/products.json";
+const cartManagerMongo = new CartManagerMongo();
+
+router.get('/', async(request, response) => {
+
+  const respuesta = await cartManagerMongo.getCarts();
+
+  response.status(respuesta.code).send({
+      status: respuesta.status,
+      message: respuesta.message
+  });
+})
+
 
 router.get("/:id", async (req, res) => {
   try {
-    const data = await readFile(carritoPath);
-    const products = JSON.parse(data);
+    await managerAcces.crearRegistro("Consulta una sola cart");
     const id = req.params.id;
-    let product = products.find((p) => {
-      return p.id == id.toString();
-    });
-    if (!product) {
+    const result = await cartManagerMongo.getCart(id);
+    res.send({ result });
+    if (!result) {
       return res.send({
         error: "Product not found.",
       });
     }
-    res.send({ status: "success", payload: product });
+    res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(404).send({ status: "error", error: "An error has occurred" });
   }
@@ -27,24 +41,22 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
+    await managerAcces.crearRegistro("Added to cart");
     const products = [];
-    const data = await readFile(carritoPath);
-    const productsData = JSON.parse(data);
-    const maxId = productsData.reduce(
-      (max, product) => Math.max(max, product.id),
+    const carts = await cartModel.find({});
+    const maxId = carts.reduce(
+      (max, cart) => Math.max(max, cart.id),
       0
     );
-    const newProductId = maxId + 1;
+    const newCartId = maxId + 1;
 
-    const newProduct = {
-      id: newProductId,
+    const newCart = new cartModel({
+      id: newCartId,
       products,
-    };
+    });
 
-    productsData.push(newProduct);
-
-    await writeFile(carritoPath, JSON.stringify(productsData));
-    res.send({ status: "success", payload: newProduct });
+    await newCart.save();
+    res.send({ status: "success", payload: newCart });
   } catch (error) {
     res.status(404).send({ status: "error", error: "An error has occurred" });
   }
@@ -52,35 +64,24 @@ router.post("/", async (req, res) => {
 
 router.post("/:cid/product/:pid", async (req, res) => {
   try {
-    const cartData = await fs.readFile(carritoPath, "utf8");
-    const carrito = JSON.parse(cartData);
-
     const cid = parseInt(req.params.cid);
-    const cartIndex = carrito.findIndex((c) => c.id === cid);
-    if (cartIndex === -1) {
+    const pid = parseInt(req.params.pid);
+
+    const cart = await cartModel.findOne({ id: cid });
+    if (!cart) {
       throw new Error(`There is no cart with ID ${cid}`);
     }
 
-    const productsData = await fs.readFile(productsPath, "utf8");
-    const productos = JSON.parse(productsData);
-
-    const pid = parseInt(req.params.pid);
-    const productIndex = productos.findIndex((p) => p.id_product === pid);
-    if (productIndex === -1) {
-      throw new Error(`There is no product with ID ${pid}`);
-    }
-
-    const producto = { id: pid, quantity: 1 };
-    const existingIndex = carrito[cartIndex].products.findIndex(
+    const existingProductIndex = cart.products.findIndex(
       (p) => p.id === pid
     );
-    if (existingIndex === -1) {
-      carrito[cartIndex].products.push(producto);
+    if (existingProductIndex === -1) {
+      cart.products.push({ id: pid, quantity: 1 });
     } else {
-      carrito[cartIndex].products[existingIndex].quantity++;
+      cart.products[existingProductIndex].quantity++;
     }
 
-    await fs.writeFile(carritoPath, JSON.stringify(carrito, null, 2));
+    await cart.save();
 
     res.send({
       status: "success",

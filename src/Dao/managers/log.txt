@@ -1,0 +1,69 @@
+Fecha: 9/5/2023 - Hora: 21:28:24 - Metodo: GET
+Fecha: 9/5/2023 - Hora: 21:34:53 - Metodo: GET
+Fecha: 9/5/2023 - Hora: 22:10:09 - Metodo: POST
+Fecha: 9/5/2023 - Hora: 22:10:34 - Metodo: POST
+Fecha: 9/5/2023 - Hora: 22:19:08 - Metodo: consult product
+Fecha: 9/5/2023 - Hora: 22:20:19 - Metodo: consult product
+Fecha: 9/5/2023 - Hora: 22:28:19 - Metodo: consult product
+Fecha: 9/5/2023 - Hora: 22:29:18 - Metodo: consult one product
+Fecha: 9/5/2023 - Hora: 22:30:42 - Metodo: consult product
+Fecha: 9/5/2023 - Hora: 22:30:50 - Metodo: Consulta un solo usuario
+Fecha: 9/5/2023 - Hora: 22:32:41 - Metodo: Added product
+Fecha: 9/5/2023 - Hora: 22:33:08 - Metodo: Added product
+Fecha: 9/5/2023 - Hora: 22:33:30 - Metodo: Added product
+Fecha: 9/5/2023 - Hora: 22:33:35 - Metodo: consult product
+Fecha: 9/5/2023 - Hora: 22:34:27 - Metodo: Consulta un solo usuario
+Fecha: 9/5/2023 - Hora: 22:35:16 - Metodo: Consulta un solo usuario
+Fecha: 9/5/2023 - Hora: 22:35:48 - Metodo: Consulta un solo usuario
+Fecha: 9/5/2023 - Hora: 22:47:08 - Metodo: Elimina un usuario
+Fecha: 9/5/2023 - Hora: 22:47:30 - Metodo: Elimina un usuario
+Fecha: 9/5/2023 - Hora: 22:47:49 - Metodo: consult product
+Fecha: 9/5/2023 - Hora: 22:48:10 - Metodo: Actualiza un usuario
+Fecha: 9/5/2023 - Hora: 22:48:26 - Metodo: consult product
+Fecha: 9/5/2023 - Hora: 23:07:42 - Metodo: Consulta un solo usuario
+Fecha: 9/5/2023 - Hora: 23:08:47 - Metodo: consult product limit
+Fecha: 9/5/2023 - Hora: 23:09:08 - Metodo: consult product limit
+Fecha: 9/5/2023 - Hora: 23:15:20 - Metodo: consult product
+Fecha: 9/5/2023 - Hora: 23:28:26 - Metodo: Elimina un usuario
+Fecha: 9/5/2023 - Hora: 23:28:59 - Metodo: Elimina un usuario
+Fecha: 9/5/2023 - Hora: 23:30:44 - Metodo: Elimina un usuario
+Fecha: 9/5/2023 - Hora: 23:33:13 - Metodo: Elimina un usuario
+Fecha: 9/5/2023 - Hora: 23:33:27 - Metodo: Elimina un usuario
+Fecha: 9/5/2023 - Hora: 23:36:13 - Metodo: Added product
+Fecha: 9/5/2023 - Hora: 23:36:21 - Metodo: Added product
+Fecha: 9/5/2023 - Hora: 23:36:22 - Metodo: Added product
+Fecha: 9/5/2023 - Hora: 23:36:23 - Metodo: Added product
+Fecha: 9/5/2023 - Hora: 23:36:25 - Metodo: Added product
+Fecha: 9/5/2023 - Hora: 23:36:32 - Metodo: Added product
+Fecha: 9/5/2023 - Hora: 23:36:47 - Metodo: Added product
+Fecha: 9/5/2023 - Hora: 23:36:53 - Metodo: Added product
+Fecha: 9/5/2023 - Hora: 23:37:01 - Metodo: Added product
+Fecha: 9/5/2023 - Hora: 23:37:05 - Metodo: Added product
+Fecha: 10/5/2023 - Hora: 19:09:13 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:10:47 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:11:08 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:11:17 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:12:34 - Metodo: Consulta una sola cart
+Fecha: 10/5/2023 - Hora: 19:22:35 - Metodo: Added product
+Fecha: 10/5/2023 - Hora: 19:22:46 - Metodo: Added product
+Fecha: 10/5/2023 - Hora: 19:24:54 - Metodo: Consulta un solo usuario
+Fecha: 10/5/2023 - Hora: 19:25:51 - Metodo: Added product
+Fecha: 10/5/2023 - Hora: 19:25:54 - Metodo: Added product
+Fecha: 10/5/2023 - Hora: 19:27:06 - Metodo: Elimina un usuario
+Fecha: 10/5/2023 - Hora: 19:28:15 - Metodo: Actualiza un usuario
+Fecha: 10/5/2023 - Hora: 19:33:31 - Metodo: Consulta una sola cart
+Fecha: 10/5/2023 - Hora: 19:53:38 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:53:48 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:53:50 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:56:49 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:57:01 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:57:33 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:57:42 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:57:43 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:57:44 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:57:45 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 19:57:46 - Metodo: Added to cart
+Fecha: 10/5/2023 - Hora: 20:09:27 - Metodo: Consulta un solo usuario
+Fecha: 10/5/2023 - Hora: 20:12:00 - Metodo: Consulta un solo usuario
+Fecha: 10/5/2023 - Hora: 20:12:47 - Metodo: Consulta un solo usuario
+Fecha: 10/5/2023 - Hora: 20:15:29 - Metodo: Added product

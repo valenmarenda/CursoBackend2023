@@ -1,14 +1,17 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import { createServer } from "http";
+import mongoose from "mongoose";
 import { Server } from "socket.io";
 import cartsRouter from "./routes/carts.router.js";
 import productsRouter from "./routes/products.router.js";
 import __dirname from "./utils.js";
 import viewRouter from "./routes/views.routes.js";
-const PORT = 8080;
 
+const PORT = 8080;
 const app = express();
+const MONGO =
+  "mongodb+srv://valentinamarenda1:ValenCoder@cluster0.hppjxho.mongodb.net/?retryWrites=true&w=majority";
+const connection = mongoose.connect(MONGO);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
@@ -16,10 +19,10 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-const server = app.listen(PORT, ()=>{
-  console.log('Servidor funcionando en el puerto: ' + PORT);
-})
-//const httpServer = createServer(app).listen(PORT);
+const server = app.listen(PORT, () => {
+  console.log("Servidor funcionando en el puerto: " + PORT);
+});
+
 const io = new Server(server);
 
 app.use("/", viewRouter);
@@ -33,5 +36,35 @@ io.on("connection", (socket) => {
   socket.on("add", (data) => {
     logs.push({ mesage: data });
     io.emit("log", { logs });
+  });
+});
+
+/// CHAT
+const Message = mongoose.model("Message", {
+  user: String,
+  message: String,
+});
+
+app.get("/chat", (req, res) => {
+  res.render("chat");
+});
+
+io.on("connection", (socket) => {
+  console.log("cliente conectado");
+
+  Message.find().then((messages) => {
+    socket.emit("historial", messages);
+  });
+
+  socket.on("mensaje", (data) => {
+    console.log(`Nuevo mensaje de ${data.user}: ${data.message}`);
+
+    const message = new Message(data);
+    message.save();
+    io.emit("mensaje", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Cliente desconectado");
   });
 });

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Conectar con el servidor de WebSocket
+    const socket = io();
+
+    // Enviar un mensaje al servidor
+    function enviarMensaje() {
+      const user = document.getElementById('user').value;
+      const message = document.getElementById('message').value;
+      socket.emit('mensaje', { user, message });
+    }
+
+    // Manejar los mensajes recibidos
+    socket.on('mensaje', (data) => {
+      const mensaje = `${data.user}: ${data.message}`;
+      const listaMensajes = document.getElementById('lista-mensajes');
+      const nuevoMensaje = document.createElement('li');
+      nuevoMensaje.textContent = mensaje;
+      listaMensajes.appendChild(nuevoMensaje);
+    });
+  </script>
+</head>
+<body>
+  <h1>Chat</h1>
+  <ul id="lista-mensajes"></ul>
+  <input type="text" id="user" placeholder="Usuario">
+  <input type="text" id="message" placeholder="Mensaje">
+  <button onclick="enviarMensaje()">Enviar</button>
+</body>
+</html>
