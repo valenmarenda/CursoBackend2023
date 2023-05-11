@@ -23,73 +23,64 @@ router.get('/', async(request, response) => {
 
 
 router.get("/:id", async (req, res) => {
+  const id = req.params.id;
+
   try {
-    await managerAcces.crearRegistro("Consulta una sola cart");
-    const id = req.params.id;
-    const result = await cartManagerMongo.getCart(id);
-    res.send({ result });
-    if (!result) {
-      return res.send({
-        error: "Product not found.",
-      });
+    const cart = await cartModel.findById(id);
+
+    if (!cart) {
+      return res.json({ status: "Product not found." });
     }
-    res.send({ status: "success", payload: result });
+
+    return res.json(cart.products);
   } catch (err) {
-    res.status(404).send({ status: "error", error: "An error has occurred" });
+    console.log(err);
+    res.status(500).json({ error: "An error has occurred" });
   }
 });
+
 
 router.post("/", async (req, res) => {
+  const { products } = req.body;
+  if (!products || !Array.isArray(products)) {
+    return res.status(400).json({ error: "The 'products' field is required and must be an array" });
+  }
+
   try {
-    await managerAcces.crearRegistro("Added to cart");
-    const products = [];
-    const carts = await cartModel.find({});
-    const maxId = carts.reduce(
-      (max, cart) => Math.max(max, cart.id),
-      0
-    );
-    const newCartId = maxId + 1;
+    const newCart = await cartModel.create({ products });
 
-    const newCart = new cartModel({
-      id: newCartId,
-      products,
-    });
-
-    await newCart.save();
-    res.send({ status: "success", payload: newCart });
-  } catch (error) {
-    res.status(404).send({ status: "error", error: "An error has occurred" });
+    return res.status(201).json(newCart);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Ocurrió un error al crear el carrito" });
   }
 });
 
+
 router.post("/:cid/product/:pid", async (req, res) => {
+  const { cid, pid } = req.params;
   try {
-    const cid = parseInt(req.params.cid);
-    const pid = parseInt(req.params.pid);
+    const cart = await cartModel.findById(cid);
 
-    const cart = await cartModel.findOne({ id: cid });
     if (!cart) {
-      throw new Error(`There is no cart with ID ${cid}`);
+      return res.json({ status: "not found." });
     }
+    const existingProduct = cart.products.find((product) => product.product === pid);
 
-    const existingProductIndex = cart.products.findIndex(
-      (p) => p.id === pid
-    );
-    if (existingProductIndex === -1) {
-      cart.products.push({ id: pid, quantity: 1 });
+    if (existingProduct) {
+      existingProduct.quantity += 1;
     } else {
-      cart.products[existingProductIndex].quantity++;
+      cart.products.push({ product: pid, quantity: 1 });
     }
 
     await cart.save();
 
-    res.send({
-      status: "success",
-      payload: `Product ${pid} added to cart ${cid}`,
-    });
-  } catch (error) {
-    res.status(404).send("Error adding product to cart");
+    return res.json(cart.products);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "An error has occurred" });
   }
 });
+
 
 export default router;
