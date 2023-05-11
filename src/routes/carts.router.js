@@ -1,25 +1,14 @@
 import { Router } from "express";
-import { readFile, writeFile } from "fs/promises";
-import fs from "fs/promises";
-import ManagerAccess from "../Dao/managers/ManagerAcces.js";
-import CartManagerMongo from "../cartmanager.js"
-const managerAcces = new ManagerAccess() 
+//import { readFile, writeFile } from "fs/promises";
+//import fs from "fs/promises";
+//import ManagerAccess from "../Dao/managers/ManagerAcces.js";
+//const managerAcces = new ManagerAccess() 
 import cartModel from "../Dao/models/carts.js";
 
 const router = Router();
-const carritoPath = "src/files/Carrito.json";
-const productsPath = "src/files/products.json";
-const cartManagerMongo = new CartManagerMongo();
+//const carritoPath = "src/files/Carrito.json";
+//const productsPath = "src/files/products.json";
 
-router.get('/', async(request, response) => {
-
-  const respuesta = await cartManagerMongo.getCarts();
-
-  response.status(respuesta.code).send({
-      status: respuesta.status,
-      message: respuesta.message
-  });
-})
 
 
 router.get("/:id", async (req, res) => {
