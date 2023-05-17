@@ -1,43 +1,37 @@
 import { Router } from "express";
-//import { readFile, writeFile } from "fs/promises";
-//import url from "url";
 import ManagerAccess from "../Dao/managers/ManagerAcces.js";
 import productModel from "../Dao/models/products.js";
-//import ProductManagerMongo from "../productsmanager.js";
+import ProductManagerMongo from "../productsmanager.js";
 
 const managerAcces = new ManagerAccess();
 
-//const productsPath = "src/files/Products.json";
 const router = Router();
-//const productManagerMongo = new ProductManagerMongo();
+
+const productManager = new ProductManagerMongo();
 
 router.get("/", async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+  const sort = req.query.sort;
+  const category = req.query.category;
+  const availability = req.query.availability;
 
   try {
-    let result;
-    if (limit > 0) {
-      result = await productModel.find().limit(limit);
-    } else {
-      result = await productModel.find();
-    }
-
-    if (result.length === 0) {
-      return res.json({ status: "File does not contain products" });
-    } else {
-      return res.json({ result });
-    }
+    const products = await productManager.getProducts(limit, page, sort, category, availability);
+    console.log(products)
+    res.json(products);
   } catch (err) {
     console.log(err);
-    res.status(404).json({ status: "error", error: "An error has occurred" });
+    res.status(500).json({ error: "An error occurred while fetching products." });
   }
 });
+
 
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
-    const product = await productModel.findById(id);
+    const product = await productManager.getProductById(id);
     if (!product) {
       return res.json({ status: "Product not found" });
     }
@@ -99,8 +93,6 @@ router.put("/:id", async (req, res) => {
     if (!existingProduct) {
       return res.json({ status: "Product not found" });
     }
-
-    // Combinar las actualizaciones con los campos existentes del producto
     const updatedProduct = { ...existingProduct.toObject(), ...updates };
 
     const result = await productModel.findByIdAndUpdate(id, updatedProduct, {

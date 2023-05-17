@@ -1,199 +1,74 @@
 import productModel from './Dao/models/products.js'
 
-class ProductManagerMongo{
-
-    async addProduct(_product){
-       // const products = await this.readJSON();
-        
-        const product = {
-            title: _product.title,
-            description: _product.description,
-            quantity: _product.quantity
-            /* code: _product.code,
-            price: _product.price,
-            status: true,
-            stock: _product.stock,
-            cateogry: _product.category,
-            thumbnails: _product.thumbnails, */
+class ProductManagerMongo {
+    async getProducts(limit, page, sort, category, availability) {
+      try {
+        let result;
+        let totalItems;
+        const query = {};
+  
+        if (category) {
+          query.category = category;
+        }
+  
+        if (availability !== undefined) {
+          query.status = availability;
+        }
+  
+        if (limit > 0) {
+          // Construir el objeto de opciones para la consulta
+          const options = {};
+  
+          // Verificar si se especificó el ordenamiento
+          if (sort) {
+            options.sort = { price: sort === "asc" ? 1 : -1 };
+          }
+  
+          // Obtener el número total de productos que coinciden con la consulta
+          totalItems = await productModel.countDocuments(query);
+  
+          // Calcular el número total de páginas
+          const totalPages = Math.ceil(totalItems / limit);
+  
+          // Calcular el índice de inicio
+          const startIndex = (page - 1) * limit;
+  
+          // Obtener los productos que coinciden con la consulta, según el límite, el índice de inicio y las opciones de ordenamiento
+          result = await productModel
+            .find(query)
+            .limit(limit)
+            .skip(startIndex)
+            .sort(options.sort);
+        } else {
+          result = await productModel.find(query);
+          totalItems = result.length;
+        }
+  
+        return {
+          status: "success",
+          payload: result,
+          totalPages: Math.ceil(totalItems / limit),
+          prevPage: page > 1 ? page - 1 : null,
+          nextPage: page < Math.ceil(totalItems / limit) ? page + 1 : null,
+          page: page,
+          hasPrevPage: page > 1,
+          hasNextPage: page < Math.ceil(totalItems / limit),
+          prevLink: page > 1 ? `/products?limit=${limit}&page=${page - 1}&sort=${sort}&category=${category}&availability=${availability}` : null,
+          nextLink: page < Math.ceil(totalItems / limit) ? `/products?limit=${limit}&page=${page + 1}&sort=${sort}&category=${category}&availability=${availability}` : null,
         };
-
-      
-
-        try {
-
-            const result = await productModel.create(product)
-                return {
-                    code: 202,
-                    status: 'Success',
-                    message: `El producto ${product.title} ha sido agregado con éxito. Su ID interno es ${product.id}`
-                };
-        } catch (error) {
-            return {
-                code: 400,
-                status: 'Error',
-                message: `${error}`
-            };
-        };
-    };
-
-    async readJSON(){
-        return await fs.promises.readFile(this.path,'utf-8').then((data) => JSON.parse(data)).catch(() => []);
-    };
-
-    async getNextID(){
-        const products = await this.readJSON();
-
-        const productIDS = Object.keys(products).map((idx)=>products[idx].id);
-
-        if(productIDS.length === 0){
-            return 0;
-        };
-
-        return Math.max(...productIDS) + 1;
+      } catch (err) {
+        console.log(err);
+        throw new Error("An error occurred while fetching products.");
+      }
     }
-
-    async getProducts(){
-        const products = await productModel.find();
-            
-       
-        return {
-            code: 202,
-            status: 'Success',
-            message: products
-        };
-    };
-
-    async getProductByID(pid){
-        const products = await this.readJSON();
-
-        const product = products.find(product => product.id === pid);
-
-        if(!product){
-            return {
-                code: 400,
-                status: 'Error',
-                message: 'No se han encontrado productos con ese ID'
-            };
-        };
-
-        return {
-            code: 202,
-            status: 'Success',
-            message: product
-        };
-    };
-
-    async updateProduct(pid, _product){
-        
-        const products = await this.readJSON();
-
-        if (!this.validateProduct(_product)){
-            return {
-                code: 400,
-                status: 'Error',
-                message: 'Faltan uno o más campos. Por favor, verifique que el objeto a insertar tenga todos los campos obligatorios, etc.'
-            };
-        };
-        
-        const idFound = products.find(product => product.id === pid);
-        
-        //Chequeo que exista un producto con ese ID
-        if (!idFound){
-            return {
-                code: 403,
-                status: 'Error',
-                message: `No se pudo encontrar un producto con el ID ${pid}`
-            };
-        };
-
-        //Chequeo que el código de producto no le pertenezca a otro producto.
-        const codeFound = products.filter(product => product.id !== pid).find(product => product.code === _product.code);
-
-        if(codeFound){
-            return {
-                code: 403,
-                status: 'Error',
-                message: `El código de producto que del producto que intenta actualizar ya pertenece al producto con ID ${codeFound.id}`
-            };
-        };
-
-        //Si pasa los chequeos, encuentro el index en el array del producto que quiero actualizar y actualizo sus propiedades
-        const productIndex = products.findIndex(product => product.id === pid);
-
-        if (!_product.thumbnails){
-            _product.thumbnails = [];
-        };
-        
-        products[productIndex].title = _product.title;
-        products[productIndex].description = _product.description,
-        products[productIndex].code = _product.code,
-        products[productIndex].price = _product.price,
-        products[productIndex].status = _product.status,
-        products[productIndex].stock = _product.stock,
-        products[productIndex].category = _product.category,
-        products[productIndex].thumbnails = _product.thumbnails
-        
+    async getProductById(id) {
         try {
-            return await fs.promises.writeFile(this.path, JSON.stringify(products))
-            .then(() => {
-                return{
-                    code: 202,
-                    status: 'Success',
-                    message: `El producto con ID ${pid} ha sido actualizado exitosamente`
-                };
-            });
-        } catch (error) {
-            return {
-                code: 400,
-                status: 'Error',
-                message: `${error}`
-            };
-        };
-    };
-
-    async deleteProduct(pid){
-        const products = await this.readJSON();
-        
-        const productToDelete = products.find(product => product.id === pid);
-            
-        if (!productToDelete) {
-            return {
-                code: 400,
-                status: 'Error',
-                message: `No existe un producto con el ID proporcionado.`
-            };
+          const product = await productModel.findById(id);
+          return product;
+        } catch (err) {
+          throw err;
         }
-
-        try {
-            return await fs.promises.writeFile(this.path, JSON.stringify(products.filter(product => product.id !== pid)))
-            .then(() => {
-                return{
-                    code: 202,
-                    status: 'Success',
-                    message: `El producto con ID ${pid} ha sido elminado exitosamente`
-                };
-            })
-        } catch (error) {
-            return {
-                code: 400,
-                status: 'Error',
-                message: `${error}`
-            };
-        }
-    };
-
-    validateProduct(_product){
-
-        if (Object.keys(_product).length === 0){
-            return false;
-        }
-
-        if (!_product.title || !_product.description || !_product.code || !_product.price || !_product.status || !_product.stock || !_product.category){
-            return false;
-        };
-
-        return true;
-    };
-}
-
-export default ProductManagerMongo;
+      }
+  }
+  
+  export default ProductManagerMongo;

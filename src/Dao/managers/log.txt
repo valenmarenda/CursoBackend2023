@@ -69,3 +69,4 @@ Fecha: 10/5/2023 - Hora: 20:12:47 - Metodo: Consulta un solo usuario
 Fecha: 10/5/2023 - Hora: 20:15:29 - Metodo: Added product
 Fecha: 10/5/2023 - Hora: 22:05:31 - Metodo: Added product
 Fecha: 10/5/2023 - Hora: 22:05:46 - Metodo: Added product
+Fecha: 15/5/2023 - Hora: 21:16:56 - Metodo: Added product
