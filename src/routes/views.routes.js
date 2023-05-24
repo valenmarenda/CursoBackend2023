@@ -16,12 +16,12 @@ const publicAcces = (req, res, next) => {
 };
 
 const privateAcces = (req, res, next) => {
-  if (!req.session.user) return res.redirect("/login");
+  if (!req.session.user) return res.redirect("/");
   next();
 };
 const adminAccess = (req, res, next) => {
   if (!req.session.user) {
-    return res.redirect("/login");
+    return res.redirect("/");
   }
 
   if (req.session.user.rol !== "admin") {
@@ -95,11 +95,8 @@ router.get("/register", publicAcces, (req, res) => {
   res.render("register");
 });
 
-router.get("/login", publicAcces, (req, res) => {
+router.get("/", publicAcces, (req, res) => {
   res.render("login");
-});
-router.get("/", privateAcces, (req, res) => {
-  res.render("notfound");
 });
 
 router.get("/profile", privateAcces, (req, res) => {
