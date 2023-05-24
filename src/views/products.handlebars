@@ -1,3 +1,9 @@
+    <h1>Tu perfil {{user.name}}</h1>
+    <p>Mail: {{user.email}}</p>
+    <p>Edad: {{user.age}}</p>
+
+    <a href="/api/session/logout"><button>Cerrar sesion</button></a>
+
 <h1>Productos</h1>
 
 {{#each products}}
@@ -21,9 +27,6 @@
 
 <script>
   function addToCart(productId) {
-    // Lógica para agregar el producto al carrito
-    // Puedes usar una petición POST al endpoint correspondiente
-    // Pasando el productId como parámetro
   }
 
   function showProductDetails(productId) {

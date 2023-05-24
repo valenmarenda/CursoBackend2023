@@ -17,8 +17,7 @@ router.get("/", async (req, res) => {
   const availability = req.query.availability;
 
   try {
-    const products = await productManager.getProducts(limit, page, sort, category, availability);
-    console.log(products)
+    const products = await productManager.getProducts(limit, page, sort, category, availability)
     res.json(products);
   } catch (err) {
     console.log(err);
