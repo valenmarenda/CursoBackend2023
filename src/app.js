@@ -9,6 +9,8 @@ import viewRouter from "./routes/views.routes.js";
 import sessionRouter from './routes/sessions.router.js'
 import session from "express-session";
 import MongoStore from "connect-mongo"
+import passport from 'passport';
+import initializePassport from './config/passport.config.js';
 
 const PORT = 8080;
 const app = express();
@@ -28,6 +30,10 @@ app.use(session({
   resave:false,
   saveUninitialized:false
 }))
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
@@ -40,7 +46,7 @@ const server = app.listen(PORT, () => {
 const io = new Server(server);
 
 app.use("/", viewRouter);
-app.use('/api/session', sessionRouter)
+app.use('/api/sessions', sessionRouter)
 app.use("/api/carts", cartsRouter);
 app.use("/api/products", productsRouter);
 

@@ -100,6 +100,7 @@ router.get("/", publicAcces, (req, res) => {
 });
 
 router.get("/profile", privateAcces, (req, res) => {
+  console.log(req.session.user)
   res.render("profile", {
     user: req.session.user,
   });
@@ -110,5 +111,11 @@ router.get("/admin", adminAccess, (req, res) => {
     user: req.session.user,
   });
 });
+router.get('/resetPassword', (req,res)=>{
+  res.render('resetPassword');
+})
 
+router.get('/fail', (req,res)=>{
+  res.render('fail');
+})
 export default router;
