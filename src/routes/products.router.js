@@ -1,7 +1,7 @@
 import { Router } from "express";
 import ManagerAccess from "../Dao/managers/ManagerAcces.js";
 import productModel from "../Dao/models/products.js";
-import ProductManagerMongo from "../productsmanager.js";
+import ProductManagerMongo from "../controllers/productsmanager.js";
 
 const managerAcces = new ManagerAccess();
 

@@ -1,4 +1,5 @@
-import cartModel from "./Dao/models/carts.js";
+
+import cartModel from "../Dao/models/carts.js";
 
 class CartManagerMongo {
   constructor(path) {

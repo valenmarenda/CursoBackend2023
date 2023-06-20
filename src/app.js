@@ -11,12 +11,12 @@ import session from "express-session";
 import MongoStore from "connect-mongo"
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
+import { config } from "./config/config.js";
 
-const PORT = 8080;
+const port = config.server.port;
 const app = express();
-
-const MONGO =
-  "mongodb+srv://valentinamarenda1:ValenCoder@cluster0.hppjxho.mongodb.net/?retryWrites=true&w=majority";
+console.log("CONFIG:", config.mongo.ttl)
+const MONGO = config.mongo.url;
 const connection = mongoose.connect(MONGO);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,9 +24,9 @@ app.use(express.static(__dirname + "/public"));
 app.use(session({
   store: new MongoStore({
       mongoUrl: MONGO,
-      ttl:3600
+      ttl:config.mongo.ttl
   }),
-  secret:'CoderSecret',
+  secret:config.mongo.secret,
   resave:false,
   saveUninitialized:false
 }))
@@ -39,8 +39,8 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
 
-const server = app.listen(PORT, () => {
-  console.log("Server running on port: " + PORT);
+const server = app.listen(port, () => {
+  console.log("Server running on port: " + port);
 });
 
 const io = new Server(server);
